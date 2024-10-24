@@ -17,7 +17,8 @@ func True(args ...bool) {
 			pc, file, line, ok := runtime.Caller(0)
 			if ok {
 				f := runtime.FuncForPC(pc)
-				instance.Logf("called by %s at %s: %d", f.Name(), file, line)
+				fFile, fLine := f.FileLine(pc)
+				instance.Logf("called by %s (%s: %d) at %s: %d", f.Name(), fFile, fLine, file, line)
 			}
 			instance.Logf("expected %v (%T) to be true", args[i], args[i])
 			instance.Fail()
