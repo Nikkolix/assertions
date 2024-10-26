@@ -14,11 +14,10 @@ func InitInstance(t *testing.T) {
 func True(args ...bool) {
 	for i := range args {
 		if !args[i] {
-			pc, file, line, ok := runtime.Caller(0)
+			pc, file, line, ok := runtime.Caller(1)
 			if ok {
 				f := runtime.FuncForPC(pc)
-				fFile, fLine := f.FileLine(pc)
-				instance.Logf("called by %s (%s: %d) at %s: %d", f.Name(), fFile, fLine, file, line)
+				instance.Logf("called by %s at %s: %d", f.Name(),file, line)
 			}
 			instance.Logf("expected %v (%T) to be true", args[i], args[i])
 			instance.Fail()
@@ -29,6 +28,11 @@ func True(args ...bool) {
 func False(args ...bool) {
 	for i := range args {
 		if args[i] {
+			pc, file, line, ok := runtime.Caller(1)
+			if ok {
+				f := runtime.FuncForPC(pc)
+				instance.Logf("called by %s at %s: %d", f.Name(), file, line)
+			}
 			instance.Logf("expected %v (%T) to be false", args[i], args[i])
 			instance.Fail()
 		}
